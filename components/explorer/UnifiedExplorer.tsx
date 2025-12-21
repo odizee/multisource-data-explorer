@@ -3,9 +3,12 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import { ProductList } from "./ProductList";
+import { useDebounce } from "./useDebounce";
 
 export function UnifiedExplorer() {
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedQuery = useDebounce(searchQuery, 500);
 
   const [toggles, setToggles] = useState({
     products: true,
@@ -38,7 +41,13 @@ export function UnifiedExplorer() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
-        <div className="h-full min-h-[500px]">Product</div>
+        <div className="h-full min-h-[500px]">
+          <ProductList
+            searchQuery={debouncedQuery}
+            isEnabled={toggles.products}
+            onToggle={handleToggle("products")}
+          />
+        </div>
 
         <div className="h-full min-h-[500px]">Repo</div>
       </div>
