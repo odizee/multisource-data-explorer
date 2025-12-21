@@ -16,7 +16,8 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   try {
-    const product = await fakeStoreApi.getProduct(parseInt(params.id));
+    const p = await params;
+    const product = await fakeStoreApi.getProduct(parseInt(p.id));
     return { title: product.title };
   } catch (e) {
     return { title: "Product Not Found" };

@@ -23,7 +23,8 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   try {
-    const repo = await githubApi.getRepo(params.owner, params.name);
+    const p = await params;
+    const repo = await githubApi.getRepo(p.owner, p.name);
     return { title: repo.full_name };
   } catch (e) {
     return { title: "Repository Not Found" };

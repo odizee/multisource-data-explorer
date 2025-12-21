@@ -41,7 +41,7 @@ export function UnifiedExplorer() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+      <div className="grid grid-cols-1 gap-6 items-start">
         <div className="h-full min-h-[500px]">
           <ProductList
             searchQuery={debouncedQuery}
