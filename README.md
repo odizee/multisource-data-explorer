@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Multi-Source Data Explorer
 
-## Getting Started
+A robust, resilient, and performant dashboard that aggregates data from multiple public APIs:
+- Fake Store API (E-commerce)
+- REST Countries API (Geographic data)
+- GitHub Search API (Repositories)
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Unified Explorer**: View data from all sources in a single, responsive dashboard.
+- **Independent Failure Handling**: One failing API does not break the entire page.
+- **Real-time Search**: Search across datasets with debounced input.
+- **Filtering & Pagination**: Efficient data navigation (client-side for small datasets, server-side for large ones).
+- **Detail Views**: Deep-linkable pages for Products, Countries, and Repositories.
+- **Toggle Controls**: Enable/disable specific datasets on the fly.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework**: Next.js (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS, Shadcn UI
+- **Testing**: Jest, React Testing Library, Playwright (Setup included)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Setup Instructions
 
-## Learn More
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd multi-source-data-explorer
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Run the development server**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. **Run Tests**
+   ```bash
+   # Unit Tests (requires jest setup)
+   npm test
 
-## Deploy on Vercel
+   # E2E Tests (requires playwright setup)
+   npx playwright test
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Architecture
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed design decisions, trade-offs, and scalability considerations.
