@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { ProductList } from "./ProductList";
 import { useDebounce } from "./useDebounce";
+import { RepoList } from "./RepoList";
 
 export function UnifiedExplorer() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -49,7 +50,13 @@ export function UnifiedExplorer() {
           />
         </div>
 
-        <div className="h-full min-h-[500px]">Repo</div>
+        <div className="h-full min-h-[500px]">
+          <RepoList
+            searchQuery={debouncedQuery}
+            isEnabled={toggles.repos}
+            onToggle={handleToggle("repos")}
+          />
+        </div>
       </div>
     </div>
   );
