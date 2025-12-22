@@ -7,6 +7,8 @@ import { DataSection } from "./DataSection";
 import { PaginationControls } from "./PaginationControls";
 import { Badge } from "@/components/ui/badge";
 import { GitFork, Star, CircleDot } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { useDebounce } from "./useDebounce";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -20,16 +22,19 @@ export function RepoList({
   onToggle: (enabled: boolean) => void;
 }) {
   const [page, setPage] = useState(1);
+  const [localQuery, setLocalQuery] = useState("");
+  const debouncedLocal = useDebounce(localQuery, 300);
+  const effectiveQuery = debouncedLocal || searchQuery;
 
   // Reset page when search changes
   useEffect(() => {
     setPage(1);
-  }, [searchQuery]);
+  }, [effectiveQuery]);
 
   const fetchRepos = useCallback(async () => {
     // API uses 1-based indexing
-    return githubApi.searchRepos(searchQuery, page, ITEMS_PER_PAGE);
-  }, [searchQuery, page]);
+    return githubApi.searchRepos(effectiveQuery, page, ITEMS_PER_PAGE);
+  }, [effectiveQuery, page]);
 
   const { data, loading, error, refetch } = useDataFetcher({
     fetcher: fetchRepos,
@@ -55,6 +60,13 @@ export function RepoList({
       onRetry={refetch}
     >
       <div className="flex flex-col min-h-[400px]">
+        <div className="p-4 border-b">
+          <Input
+            placeholder="Search repositories..."
+            value={localQuery}
+            onChange={(e) => setLocalQuery(e.target.value)}
+          />
+        </div>
         <div className="flex-1 space-y-2 p-4">
           {repos.length === 0 && !loading && (
             <div className="text-center text-muted-foreground py-8">

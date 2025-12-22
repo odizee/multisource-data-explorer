@@ -1,19 +1,17 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
-import Link from "next/link";
-import { Product } from "@/types";
-import { fakeStoreApi } from "@/lib/api/fakeStore";
+import { Country } from "@/types";
+import { countriesApi } from "@/lib/api/countries";
 import { useDataFetcher } from "@/hooks/useDataFetcher";
 import { DataSection } from "./DataSection";
 import { PaginationControls } from "./PaginationControls";
 import { Badge } from "@/components/ui/badge";
-import { Star } from "lucide-react";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "./useDebounce";
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 10;
 
-export function ProductList({
+export function CountryList({
   searchQuery,
   isEnabled,
   onToggle,
@@ -22,50 +20,45 @@ export function ProductList({
   isEnabled: boolean;
   onToggle: (enabled: boolean) => void;
 }) {
-  const fetchProducts = useCallback(() => fakeStoreApi.getProducts(100), []);
+  const fetchCountries = useCallback(() => countriesApi.getAll(), []);
 
-  const {
-    data: products,
-    loading,
-    error,
-    refetch,
-  } = useDataFetcher<Product[]>({
-    fetcher: fetchProducts,
+  const { data: countries, loading, error, refetch } = useDataFetcher<Country[]>({
+    fetcher: fetchCountries,
     enabled: isEnabled,
   });
 
   const [page, setPage] = useState(1);
   const [localQuery, setLocalQuery] = useState("");
   const debouncedLocal = useDebounce(localQuery, 300);
-
   const effectiveQuery = debouncedLocal || searchQuery;
 
-  const filteredProducts = useMemo(() => {
-    if (!products) return [];
-    if (!effectiveQuery) return products;
-    const lowerQuery = effectiveQuery.toLowerCase();
-    return products.filter(
-      (p) =>
-        p.title.toLowerCase().includes(lowerQuery) ||
-        p.category.toLowerCase().includes(lowerQuery)
-    );
-  }, [products, effectiveQuery]);
+  const filtered = useMemo(() => {
+    if (!countries) return [];
+    if (!effectiveQuery) return countries;
+    const q = effectiveQuery.toLowerCase();
+    return countries.filter((c) => {
+      const name = c.name?.common?.toLowerCase() || "";
+      const region = c.region?.toLowerCase() || "";
+      const capital = (c.capital?.[0] || "").toLowerCase();
+      return (
+        name.includes(q) ||
+        region.includes(q) ||
+        capital.includes(q)
+      );
+    });
+  }, [countries, effectiveQuery]);
 
-  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
-  const paginatedProducts = filteredProducts.slice(
-    (page - 1) * ITEMS_PER_PAGE,
-    page * ITEMS_PER_PAGE
-  );
+  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+  const paginated = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
-  // Reset page when search changes
   useEffect(() => {
     setPage(1);
   }, [effectiveQuery]);
 
   return (
     <DataSection
-      title="Products"
-      count={filteredProducts.length}
+      title="Countries"
+      count={filtered.length}
       isLoading={loading}
       error={error}
       isEnabled={isEnabled}
@@ -75,52 +68,47 @@ export function ProductList({
       <div className="flex flex-col min-h-[400px]">
         <div className="p-4 border-b">
           <Input
-            placeholder="Search products..."
+            placeholder="Search countries..."
             value={localQuery}
             onChange={(e) => setLocalQuery(e.target.value)}
           />
         </div>
         <div className="flex-1 space-y-2 p-4">
-          {paginatedProducts.length === 0 && !loading && (
-            <div className="text-center text-muted-foreground py-8">
-              No products found
-            </div>
+          {paginated.length === 0 && !loading && (
+            <div className="text-center text-muted-foreground py-8">No countries found</div>
           )}
-          {paginatedProducts.map((product) => (
-            <Link
-              href={`/product/${product.id}`}
-              key={product.id}
-              className="block group"
-            >
+          {paginated.map((c) => (
+            <div key={c.cca3} className="block group">
               <div className="flex gap-4 p-3 rounded-lg hover:bg-muted/50 transition-colors border">
-                <div className="h-20 w-20 flex-shrink-0 bg-white rounded-md p-2 flex items-center justify-center border">
+                <div className="h-12 w-20 flex-shrink-0 bg-white rounded-md p-2 flex items-center justify-center border">
                   <Image
-                    src={product.image}
-                    alt={product.title}
+                    src={c.flags.png}
+                    alt={c.flags.alt || c.name.common}
                     width={80}
-                    height={80}
+                    height={48}
                     className="object-contain"
                   />
                 </div>
                 <div className="flex-1 min-w-0">
                   <h4 className="font-medium text-sm truncate group-hover:text-primary">
-                    {product.title}
+                    {c.name.common}
                   </h4>
                   <div className="flex items-center gap-2 mt-1">
                     <Badge variant="outline" className="text-xs">
-                      {product.category}
+                      {c.region}
                     </Badge>
-                    <div className="flex items-center text-xs text-muted-foreground">
-                      <Star className="h-3 w-3 fill-yellow-400 text-yellow-400 mr-1" />
-                      {product.rating.rate} ({product.rating.count})
-                    </div>
-                  </div>
-                  <div className="mt-2 font-bold text-sm">
-                    ${product.price.toFixed(2)}
+                    <span className="text-xs text-muted-foreground">
+                      Pop. {c.population.toLocaleString()}
+                    </span>
+                    {c.capital?.[0] && (
+                      <span className="text-xs text-muted-foreground">
+                        Capital {c.capital[0]}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
         {totalPages > 1 && (

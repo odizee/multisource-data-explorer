@@ -52,3 +52,29 @@ export interface ApiResponse<T> {
   error: string | null;
   loading: boolean;
 }
+
+export interface CartProduct {
+  productId: number;
+  quantity: number;
+}
+
+export interface Cart {
+  id: number;
+  userId: number;
+  date: string;
+  products: CartProduct[];
+}
+
+export interface User {
+  id: number;
+  email: string;
+  username: string;
+  name: {
+    firstname: string;
+    lastname: string;
+  };
+  address?: {
+    city?: string;
+  };
+  phone?: string;
+}

@@ -87,7 +87,7 @@ test("home explorer renders datasets and supports search and toggles", async ({
   await expect(page.getByText("No description available")).toBeVisible();
 
   // Search filters products (debounced)
-  await page.fill('input[placeholder="Search all datasets..."]', "electronics");
+  await page.fill('input[placeholder="Search products..."]', "electronics");
   await page.waitForTimeout(600);
   await expect(page.getByText("Laptop Pro")).toBeVisible();
   await expect(page.getByText("Product 2")).not.toBeVisible();

@@ -1,7 +1,8 @@
-import { Product } from "@/types";
+import { Product, Cart, User } from "@/types";
 import { fetchJson } from "./utils";
 
-const BASE_URL = process.env.NEXT_PUBLIC_FAKESTORE_URL || "https://fakestoreapi.com";
+const BASE_URL =
+  process.env.NEXT_PUBLIC_FAKESTORE_URL || "https://fakestoreapi.com";
 
 export const fakeStoreApi = {
   getProducts: async (limit = 20): Promise<Product[]> => {
@@ -18,5 +19,21 @@ export const fakeStoreApi = {
 
   getProductsByCategory: async (category: string): Promise<Product[]> => {
     return fetchJson<Product[]>(`${BASE_URL}/products/category/${category}`);
+  },
+
+  getCarts: async (): Promise<Cart[]> => {
+    return fetchJson<Cart[]>(`${BASE_URL}/carts`);
+  },
+
+  getCart: async (id: number): Promise<Cart> => {
+    return fetchJson<Cart>(`${BASE_URL}/carts/${id}`);
+  },
+
+  getUsers: async (): Promise<User[]> => {
+    return fetchJson<User[]>(`${BASE_URL}/users`);
+  },
+
+  getUser: async (id: number): Promise<User> => {
+    return fetchJson<User>(`${BASE_URL}/users/${id}`);
   },
 };

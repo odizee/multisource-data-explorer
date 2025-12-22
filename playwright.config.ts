@@ -23,6 +23,7 @@ export default defineConfig({
     env: {
       NEXT_PUBLIC_FAKESTORE_URL: "http://localhost:3000/api/mock/fakeStore",
       NEXT_PUBLIC_GITHUB_API_URL: "http://localhost:3000/api/mock/github",
+      NEXT_PUBLIC_COUNTRIES_API_URL: "http://localhost:3000/api/mock/countries",
     },
   },
 });

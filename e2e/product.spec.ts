@@ -20,8 +20,11 @@ test("product detail renders and handles error", async ({ page }) => {
   });
 
   await page.goto("/product/1");
+  await page.waitForLoadState("networkidle");
 
-  await expect(page.getByText("E2E Product")).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "E2E Product" })
+  ).toBeVisible();
   await expect(page.getByText("Electronics")).toBeVisible();
   await expect(page.getByText(/4.7 \(123 reviews\)/)).toBeVisible();
   await expect(page.getByText("Add to Cart")).toBeVisible();
