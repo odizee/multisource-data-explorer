@@ -6,7 +6,6 @@ const BASE_URL =
 
 export const countriesApi = {
   getAll: async (): Promise<Country[]> => {
-    // Request only the fields we actually render to reduce payload and satisfy APIs requiring 'fields'
     const fields = [
       "name",
       "cca3",

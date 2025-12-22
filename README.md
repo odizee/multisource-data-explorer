@@ -8,11 +8,10 @@ A robust, resilient, and performant dashboard that aggregates data from multiple
 ## Features
 
 - **Unified Explorer**: View data from all sources in a single, responsive dashboard.
-- **Independent Failure Handling**: One failing API does not break the entire page.
 - **Real-time Search**: Search across datasets with debounced input.
 - **Filtering & Pagination**: Efficient data navigation (client-side for small datasets, server-side for large ones).
 - **Detail Views**: Deep-linkable pages for Products, Countries, and Repositories.
-- **Toggle Controls**: Enable/disable specific datasets on the fly.
+- **Toggle Controls**: Enable/disable specific datasets.
 
 ## Tech Stack
 
@@ -26,7 +25,7 @@ A robust, resilient, and performant dashboard that aggregates data from multiple
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd multi-source-data-explorer
+   cd multisource-data-explorer
    ```
 
 2. **Install dependencies**
@@ -46,7 +45,7 @@ A robust, resilient, and performant dashboard that aggregates data from multiple
    npm test
 
    # E2E Tests (requires playwright setup)
-   npx playwright test
+   npm run e2e:test
    ```
 
 ## Architecture

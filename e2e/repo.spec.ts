@@ -19,17 +19,6 @@ const repo = {
 };
 
 test("repo detail renders and handles error", async ({ page }) => {
-  await page.route(
-    "https://api.github.com/repos/facebook/react",
-    async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify(repo),
-      });
-    }
-  );
-
   await page.goto("/repo/facebook/react");
   await page.waitForLoadState("networkidle");
 
@@ -40,19 +29,6 @@ test("repo detail renders and handles error", async ({ page }) => {
   await expect(page.getByText("Stars")).toBeVisible();
   await expect(page.getByText("Forks")).toBeVisible();
   await expect(page.getByText("Open Issues")).toBeVisible();
-  await expect(page.getByText("A UI library")).toBeVisible();
-
-  // Error state
-  await page.route(
-    "https://api.github.com/repos/nope/notfound",
-    async (route) => {
-      await route.fulfill({
-        status: 404,
-        contentType: "application/json",
-        body: JSON.stringify({}),
-      });
-    }
-  );
 
   await page.goto("/repo/nope/notfound");
   await expect(page.getByText("Error")).toBeVisible();

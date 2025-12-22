@@ -16,7 +16,6 @@ export const githubApi = {
     page = 1,
     perPage = 30
   ): Promise<GithubSearchResponse> => {
-    // Default to 'react' if query is empty to show some initial data
     const q = query || "react";
     return fetchJson<GithubSearchResponse>(
       `${BASE_URL}/search/repositories?q=${encodeURIComponent(
